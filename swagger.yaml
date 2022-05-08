@@ -1,0 +1,405 @@
+openapi: 3.0.0
+info:
+  title: Jobs API
+  contact: {}
+  version: '1.0'
+servers:
+- url: https://jobs-api-arie.herokuapp.com/api/v1
+  variables: {}
+paths:
+  /jobs:
+    get:
+      tags:
+      - Jobs
+      summary: Get All Jobs
+      operationId: GetAllJobs
+      parameters:
+      - name: address
+        in: query
+        description: address by exact province, region and city
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 62447a2201456334f82a4af4
+      - name: search
+        in: query
+        description: Fuzzy search based on title and description
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: salaryRange
+        in: query
+        description: Determines the minimum salary and maximum salary
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /auth/register:
+    post:
+      tags:
+      - Auth
+      summary: Register
+      description: Registration endpoint for employers
+      operationId: Register
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+            example:
+              firstName: employer firstName
+              lastName: employer lastName
+              email: employer10@gmail.com
+              phoneNumber: '6444786131'
+              password: password1234
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /auth/login:
+    post:
+      tags:
+      - Auth
+      summary: Login
+      description: Login endpoint for employers
+      operationId: Login
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              email: employer10@gmail.com
+              password: password1234
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /user-jobs:
+    post:
+      tags:
+      - User-Jobs
+      summary: Create Job
+      description: Endpoint for employers to create a job
+      operationId: CreateJob
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateJobRequest'
+            example:
+              title: Labourer
+              contactPhoneNumber: '6444786131'
+              contactEmail: employer10@gmail.com
+              description: Hello, In need of someone to help unload furniture with me on may 24th, Afternoon in Rutherford. Ill pay well. Must be careful. Nothing too heavy but pls be strong enough to help with sofas etc
+              hourlySalary: 22
+              duration: Within a day
+              streetLocation: 3175 Rutherford Rd Unit 40, Concord, ON L4K 5Y6
+              startDate: 2022-05-24
+              province: Ontario
+              region: Greater Toronto Area
+              city: Vaughan
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+      - User-Jobs
+      summary: Get User Jobs
+      description: Endpoint for employers to get all jobs that belong to them
+      operationId: GetUserJobs
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /user/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: The user job ID
+    get:
+      tags:
+      - User-Jobs
+      summary: Get User Job (single)
+      description: Endpoint for employers to get a single job that belongs to them
+      operationId: GetUserJob(single)
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  
+    patch:
+      tags:
+      - User-Jobs
+      summary: Update User Job
+      description: Endpoint for employers to update a job that belongs to them
+      operationId: UpdateUserJob
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserJobRequest'
+            example:
+              companyName: s
+              title: Houses s
+              contactPhoneNumber: '1211312239'
+              contactEmail: ekenedimude@gmail.com
+              description: Need help cleaning my house - 4 bedroom in vaghan
+              hourlySalary: 15
+              duration: Within a day
+              streetLocation: 15153 scarborough town center
+              startDate: 2022-05-30
+              province: Ontario
+              region: Greater Toronto Area
+              city: North York
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+      - User-Jobs
+      summary: Delete Job
+      description: Endpoint for employers to delete a job
+      operationId: DeleteJob
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /addresses:
+    get:
+      tags:
+      - Addresses
+      summary: Get All Addresses
+      description: Gets all addresses that could be filtered by province, region and city
+      operationId: GetAllAddresses
+      parameters:
+      - name: province
+        in: query
+        description: ''
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: Ontario
+      - name: region
+        in: query
+        description: ''
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: Greater Toronto Area
+      - name: city
+        in: query
+        description: ''
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: North York
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+components:
+  schemas:
+    RegisterRequest:
+      title: RegisterRequest
+      required:
+      - firstName
+      - lastName
+      - email
+      - phoneNumber
+      - password
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
+        password:
+          type: string
+      example:
+        firstName: employer firstName
+        lastName: employer lastName
+        email: employer10@gmail.com
+        phoneNumber: '6444786131'
+        password: password1234
+    LoginRequest:
+      title: LoginRequest
+      required:
+      - email
+      - password
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        email: employer10@gmail.com
+        password: password1234
+    CreateJobRequest:
+      title: CreateJobRequest
+      required:
+      - title
+      - contactPhoneNumber
+      - contactEmail
+      - description
+      - hourlySalary
+      - duration
+      - streetLocation
+      - startDate
+      - province
+      - region
+      - city
+      type: object
+      properties:
+        title:
+          type: string
+        contactPhoneNumber:
+          type: string
+        contactEmail:
+          type: string
+        description:
+          type: string
+        hourlySalary:
+          type: integer
+          format: int32
+        duration:
+          type: string
+        streetLocation:
+          type: string
+        startDate:
+          type: string
+        province:
+          type: string
+        region:
+          type: string
+        city:
+          type: string
+      example:
+        title: Labourer
+        contactPhoneNumber: '6475136131'
+        contactEmail: employer10@gmail.com
+        description: Hello, In need of someone to help unload furniture with me on may 24th, Afternoon in Rutherford. Ill pay well. Must be careful. Nothing too heavy but pls be strong enough to help with sofas etc
+        hourlySalary: 22
+        duration: Within a day
+        streetLocation: 3175 Rutherford Rd Unit 40, Concord, ON L4K 5Y6
+        startDate: 2022-05-24
+        province: Ontario
+        region: Greater Toronto Area
+        city: Vaughan
+    UpdateUserJobRequest:
+      title: UpdateUserJobRequest
+      required:
+      - companyName
+      - title
+      - contactPhoneNumber
+      - contactEmail
+      - description
+      - hourlySalary
+      - duration
+      - streetLocation
+      - startDate
+      - province
+      - region
+      - city
+      type: object
+      properties:
+        companyName:
+          type: string
+        title:
+          type: string
+        contactPhoneNumber:
+          type: string
+        contactEmail:
+          type: string
+        description:
+          type: string
+        hourlySalary:
+          type: integer
+          format: int32
+        duration:
+          type: string
+        streetLocation:
+          type: string
+        startDate:
+          type: string
+        province:
+          type: string
+        region:
+          type: string
+        city:
+          type: string
+      example:
+        companyName: s
+        title: Houses s
+        contactPhoneNumber: '1211312239'
+        contactEmail: ekenedimude@gmail.com
+        description: Need help cleaning my house - 4 bedroom in vaghan
+        hourlySalary: 15
+        duration: Within a day
+        streetLocation: 15153 scarborough town center
+        startDate: 2022-05-30
+        province: Ontario
+        region: Greater Toronto Area
+        city: North York
+  securitySchemes:
+    httpBearer:
+      type: http
+      scheme: bearer
+security:
+- httpBearer: []
+tags:
+- name: Jobs
+  description: ''
+- name: Auth
+  description: ''
+- name: User-Jobs
+  description: ''
+- name: Addresses
+  description: ''
