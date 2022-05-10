@@ -48,11 +48,12 @@ const getAllJobs = async (req, res) => {
 
     if (search) {
       // Fuzzy search based on title and description
+      // Sorted based on confidence score
       result = result.fuzzySearch(search);
     }
 
     // Sort by newer jobs 
-    result = result.sort('-createdAt');
+    // result = result.sort('-createdAt');
 
   
     if (fields) {
